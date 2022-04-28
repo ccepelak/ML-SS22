@@ -1,7 +1,9 @@
-# ML-SS22
+# Using Satellite Images to Predict Poverty
 
 Poverty is a multifaceted problem manifested by conditions such as malnutrition, homelessness, lack of access to clean water, low educational achievement, and the like (UN 2005). It continues to be one the world’s most pressing issues and it has only been exacerbated by the economic effects of the COVID-19 pandemic. The United Nations’ Sustainable Development Agenda for 2015-2030 identifies poverty eradication as one of its top priorities – evidence that governments across the globe are committed to alleviating poverty. 
 
 It follows that poverty statistics are among the most important and most widely used data in the economic and policy research sphere. Practical and ground-level applications include identification of vulnerable populations for rolling out interventions by humanitarian and development organizations. However, measuring and monitoring poverty is both conceptually and operationally challenging. Poverty measurement is commonly the responsibility of national statistics offices, but the capacity to produce accurate and frequent information vary widely depending on the country. Ironically, the most vulnerable economies in need of extensive and up-to-date poverty data are also those who lack the capacity to compile them. Countries in extreme poverty or in conflict often lack relevant survey data for several years. 
 
 This project aims to contribute to the research body on bridging poverty statistics measurement gaps, through the application of machine learning techniques in satellite images and open source spatial data. The machine learning model will incorporate intuitive geospatial variables to facilitate insightful interpretations and comparisons of different factors associated with poverty. 
+
+We are using satellite images from this [kaggle dataset](https://www.kaggle.com/datasets/sandeshbhat/satellite-images-to-predict-povertyafrica?resource=download&select=Mali_archive). 
