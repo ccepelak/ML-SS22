@@ -17,10 +17,13 @@ import os, glob
 
 ## DIRECTORIES
 
-repo = '/Users/janinedevera/Documents/School/MDS 2021-2023/Semester 2/3 Machine Learning/Project/Poverty/ML-SS22'
+main = '/Users/janinedevera/Documents/School/MDS 2021-2023/Semester 2/3 Machine Learning/Project/Poverty/'
+repo = main + 'ML-SS22/'
+maps = main + 'Data/Maps/'
 gdrive = '/Volumes/GoogleDrive/Shared drives/ML Project_Satellite Images and Poverty/'
 dhs_vars = 'Outcome/Wealth Index/'
-dhs_geo = 'Outcome/Geo Data'
+dhs_geo = 'Outcome/Geo Data/'
+final_out = 'Outcome/Final Outcome/'
 
 ## OUTCOME VARIABLES
 
@@ -77,13 +80,54 @@ ngr_gdf.to_file("ngr_gdf.shp")
 
 ####### MAPS
 
-#outcome_gdf['geoid'] = (~outcome_gdf.geometry.duplicated()).cumsum()
+    # read final outcome geodf 
+eth_gdf = gpd.read_file(gdrive + final_out + 'eth_gdf.shp')
+mlw_gdf = gpd.read_file(gdrive + final_out + 'mlw_gdf.shp')
+mli_gdf = gpd.read_file(gdrive + final_out + 'mli_gdf.shp')
+ngr_gdf = gpd.read_file(gdrive + final_out + 'ngr_gdf.shp')
+
+    # read country map
+mlw_map = gpd.read_file(maps + 'Malawi/mwi_admbnda_adm3_nso_20181016.shp')
+eth_map = gpd.read_file(maps + 'Ethiopia/eth_admbnda_adm2_csa_bofedb_2021.shp')
+mli_map = gpd.read_file(maps + 'Mali/mli_admbnda_adm3_1m_gov_20211220.shp')
+ngr_map = gpd.read_file(maps + 'Nigeria/NER_adm02_feb2018.shp')
 
 
-    # cluster dataset
-ml_geo = ml_gdf[["geoid", "geometry"]]
-ml_plot = ml_gdf.groupby(["geoid"]).mean().reset_index()
-ml_plot = pd.merge(ml_geo, ml_plot).drop_duplicates()
+    # gdf set up 
+def genid (geodf):
+    geodf['geoid'] = (~geodf.geometry.duplicated()).cumsum()
+    return geodf
+
+    # map function 
+def genmaps (geodf, shp):
+    coord = geodf[["geoid", "geometry"]]
+    clus = geodf.groupby(["geoid"]).mean().reset_index()
+    clus = pd.merge(coord, clus).drop_duplicates()
+    join = gpd.sjoin(clus, shp, how = 'right', predicate = 'within')
+    join = join[join['wealth'].notna()]
+    img = join.plot(alpha=0.7, column = "wealth", cmap = "RdYlGn", legend=True, figsize=(6,8),
+                 legend_kwds={'label': "Wealth Index"})
+    img.set_axis_off();
+    return img
+
+
+    ## malawi
+mlw_gdf = genid(mlw_gdf)
+mlw_img = genmaps(mlw_gdf, mlw_map)
+
+    ## ethiopia
+eth_gdf = genid(eth_gdf)
+eth_img = genmaps(eth_gdf, eth_map)
+
+    ## mali
+mli_gdf = genid(mli_gdf)
+mli_img = genmaps(mli_gdf, mli_map)
+
+    ## nigeria
+ngr_gdf = genid(ngr_gdf)
+ngr_img = genmaps(ngr_gdf, ngr_map)
+
+
 
 
 
