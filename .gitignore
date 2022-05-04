@@ -1,3 +1,4 @@
 image_data/*
 X_full_flat_(26673, 128, 128, 4).txt
 y_full.txt
+models/*
